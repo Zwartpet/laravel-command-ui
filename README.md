@@ -1,92 +1,72 @@
-# :package_description
+# Laravel Command UI
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/zwartpet/command-ui.svg?style=flat-square)](https://packagist.org/packages/zwartpet/command-ui)
+[![Test](https://github.com/Zwartpet/laravel-command-ui/actions/workflows/main.yml/badge.svg)](https://github.com/Zwartpet/laravel-command-ui/actions/workflows/main.yml)
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Add an admin interface where you can run Laravel commands without the need to SSH into the server.
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
+composer require zwartpet/schedule-manager
 ```
 
-You can publish and run the migrations with:
-
+Publish the assets
 ```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
+php artisan vendor:publish --tag=schedule-manager-assets
 ```
 
 ## Usage
 
+The UI is available on the `/command-ui` route, configurable with `COMMAND_UI_URI` in your `.env` file.
+
+The route is protected with a [Laravel Gate](https://laravel.com/docs/12.x/authorization#gates) named `command-ui` which you can customize with `COMMAND_UI_GATE` in your `.env` file.
+Create the gate by adding the following to your `AuthServiceProvider`, not adding this will result in a 404 error when visiting the route.
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+Gate::define('command-ui', function (User $user) {
+    return $user->isAdmin; // or any other logic
+});
 ```
+
+### Configuration
+
+This library is plug and play and works out of the box. There are some configuration options available.
+
+The list of commands is filtered by a blacklist or whitelist, by default the blacklist is used.  
+Publish the configuration to change the lists to your needs.
+```bash
+php artisan vendor:publish --tag=command-ui-config
+```
+
+For all the configuration options see the [config file](config/config.php).
 
 ## Testing
 
+Pest
 ```bash
 composer test
 ```
 
-## Changelog
+Pint
+```bash
+composer test:lint
+```
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+PHPStan
+```bash
+composer test:types
+```
 
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
-- [All Contributors](../../contributors)
+-   [John Zwarthoed](https://github.com/zwartpet)
+-   [All Contributors](../../contributors)
 
 ## License
 

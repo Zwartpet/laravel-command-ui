@@ -1,37 +1,37 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Zwartpet\CommandUI\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
-use VendorName\Skeleton\SkeletonServiceProvider;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Orchestra\Testbench\Concerns\WithWorkbench;
+use Orchestra\Testbench\Pest\WithPest;
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use Workbench\App\Providers\WorkbenchServiceProvider;
+use Zwartpet\CommandUI\CommandUIServiceProvider;
 
-class TestCase extends Orchestra
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+class TestCase extends OrchestraTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
+    use RefreshDatabase;
+    use WithPest;
+    use WithWorkbench;
 
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'VendorName\\Skeleton\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
-    }
-
+    /**
+     * add the package provider
+     *
+     * @return array
+     */
     protected function getPackageProviders($app)
     {
         return [
-            SkeletonServiceProvider::class,
+            WorkbenchServiceProvider::class,
+            CommandUIServiceProvider::class,
         ];
     }
 
-    public function getEnvironmentSetUp($app)
-    {
-        config()->set('database.default', 'testing');
-
-        /*
-         foreach (\Illuminate\Support\Facades\File::allFiles(__DIR__ . '/database/migrations') as $migration) {
-            (include $migration->getRealPath())->up();
-         }
-         */
-    }
+    protected function defineRoutes($router) {}
 }

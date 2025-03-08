@@ -10,12 +10,12 @@ Add an admin interface where you can run Laravel commands without the need to SS
 You can install the package via composer:
 
 ```bash
-composer require zwartpet/schedule-manager
+composer require zwartpet/command-ui
 ```
 
 Publish the assets
 ```bash
-php artisan vendor:publish --tag=schedule-manager-assets
+php artisan vendor:publish --tag=command-ui-assets
 ```
 
 ## Usage
